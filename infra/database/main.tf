@@ -14,6 +14,12 @@ resource "azurerm_resource_group" "rg" {
   location = local.region
 }
 
+data "azurerm_subnet" "subnet" {
+  name                 = "snet-dev-compute"
+  virtual_network_name = "vnet-dev"
+  resource_group_name  = "rg-network"
+}
+
 resource "random_password" "mssqlpassword" {
   length           = 16
   special          = true
@@ -25,11 +31,20 @@ resource "azurerm_key_vault" "kv" {
   location                    = azurerm_resource_group.rg.location
   resource_group_name         = azurerm_resource_group.rg.name
   enabled_for_disk_encryption = true
+  enable_rbac_authorization   = true
+  enabled_for_deployment      = true
   tenant_id                   = data.azurerm_client_config.current.tenant_id
   soft_delete_retention_days  = 7
   purge_protection_enabled    = false
 
   sku_name = "standard"
+
+  network_acls {
+    bypass                     = "AzureServices"
+    default_action             = "Deny"
+    ip_rules                   = ["8.29.228.126", "20.81.155.16"]
+    virtual_network_subnet_ids = [data.azurerm_subnet.subnet.id]
+  }
 
   tags = local.tags
 }
