@@ -2,12 +2,12 @@ from azure.identity import DefaultAzureCredential
 from azure.keyvault.secrets import SecretClient
 
 # Load Key Vault details from env
-key_vault_name = os.getenv("KEYVAULT_NAME") 
+key_vault_name = "kv-0fe8b4" 
 kv_uri = f"https://{key_vault_name}.vault.azure.net/"
 
 # Secret name should contain the full SQL connection string
-db_connection_string_secret = os.getenv("SQL_CONNECTION_SECRET_NAME") 
-open_api_key_secret = os.getenv("OPEN_API_KEY_SECRET_NAME") 
+db_connection_string_secret = "sql-server-admin-password" 
+open_api_key_secret = "openai-api-key"
 
 # Authenticate and fetch secret
 credential = DefaultAzureCredential()

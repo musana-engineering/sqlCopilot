@@ -1,16 +1,17 @@
 // LOCALS
 locals {
-  region               = "eastus2"
+  region = "eastus2"
   tags = {
     provisioner = "terraform"
   }
 }
 
 variable "project_id" {}
+data "azurerm_client_config" "current" {}
 
 resource "azurerm_resource_group" "rg" {
-  name       = "rg-${substr(var.project_id, 0, 6)}"
-  location   = local.region
+  name     = "rg-${substr(var.project_id, 0, 6)}"
+  location = local.region
 }
 
 resource "random_password" "mssqlpassword" {
@@ -83,7 +84,7 @@ resource "azurerm_mssql_database" "db" {
   elastic_pool_id = azurerm_mssql_elasticpool.mssql.id
   collation       = "SQL_Latin1_General_CP1_CI_AS"
   license_type    = "LicenseIncluded"
-  sample_name = "AdventureWorksLT"
+  sample_name     = "AdventureWorksLT"
 
   tags = local.tags
 
