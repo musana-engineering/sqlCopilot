@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+openai>=1.0.0
+pyodbc
+pandas
+python-dotenv
+azure-identity
+azure-keyvault-secrets
